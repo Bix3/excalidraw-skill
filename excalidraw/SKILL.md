@@ -30,6 +30,10 @@ If the PNG has no embedded scene, ask the user for the source file instead.
 2. Render it, check the result, and embed the scene into the PNG.
 3. Save the PNG. Keep the `.excalidraw` file too if requested.
 
+## Scene JSON and layout edits
+
+`.excalidraw` is plain JSON. See the [official JSON schema](https://docs.excalidraw.com/docs/codebase/json-schema) for the document format and [element types](https://github.com/excalidraw/excalidraw/blob/master/packages/element/src/types.ts) for detailed fields. The schema page's commented example is illustrative, not valid JSON or a complete element template.
+
 ## Tools
 
 The Python scripts are in `scripts/` beside this skill file. Paths below are relative to the skill directory; use full paths when working elsewhere.
