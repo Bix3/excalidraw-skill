@@ -7,14 +7,14 @@ description: Create, modify and render Excalidraw scenes and editable PNGs.
 
 ## Requirements:
 
-Check that both `magick --version` and `excalidraw --version` work.
-If not then do not continue and instead notify the user.
+If a command fails during operation because a dependency is missing, report the missing dependency and stop.
 
 ## Modify an existing PNG
 
-1. Extract its scene to a temporary `.excalidraw` file.
-2. Edit the scene, render it, and embed the edited scene into the new PNG.
-3. Check the result, then replace the original PNG.
+1. Extract its scene once to a temporary `.excalidraw` file.
+2. Edit that temporary scene, render it, and embed the edited scene into the new PNG.
+3. Inspect the PNG. If corrections are needed, repeat step 2 using the same temporary scene.
+4. Once satisfied, replace the original PNG.
 
 If the PNG has no embedded scene, ask the user for the source file instead.
 
@@ -55,6 +55,5 @@ For extraction-only or rendering-only requests, use just the needed steps.
 
 - Name editable PNGs `*.excalidraw.png` by default, unless the user specifies another name.
 - Preserve unrelated content and the original theme unless asked to change them.
-- Before publishing an editable PNG, extract its scene and compare it with the edited source using `cmp`.
 - Keep temporary files beside the destination. Replace originals with `mv` only after all steps succeed.
 - Delete temporary files on success or failure; keep only the requested outputs.
