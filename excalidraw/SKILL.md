@@ -30,9 +30,42 @@ If the PNG has no embedded scene, ask the user for the source file instead.
 2. Render it, check the result, and embed the scene into the PNG.
 3. Save the PNG. Keep the `.excalidraw` file too if requested.
 
-## Scene JSON and layout edits
+## Scene JSON
 
 `.excalidraw` is plain JSON. See the [official JSON schema](https://docs.excalidraw.com/docs/codebase/json-schema) for the document format and [element types](https://github.com/excalidraw/excalidraw/blob/master/packages/element/src/types.ts) for detailed fields. The schema page's commented example is illustrative, not valid JSON or a complete element template.
+
+### Style defaults
+
+Minimal templates for new elements, unless requested otherwise:
+
+Text:
+```json
+{
+  "type": "text",
+  "text": "Label",
+  "fontFamily": 5,
+  "fontSize": 20,
+  "lineHeight": 1.25,
+  "textAlign": "left",
+  "verticalAlign": "top",
+  "strokeColor": "#1e1e1e"
+}
+```
+
+Shape:
+```json
+{
+  "type": "rectangle",
+  "roughness": 1,
+  "strokeWidth": 2,
+  "strokeColor": "#1e1e1e",
+  "backgroundColor": "transparent",
+  "fillStyle": "solid",
+  "roundness": null
+}
+```
+
+Preserve existing styles when editing.
 
 ## Tools
 
