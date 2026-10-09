@@ -42,13 +42,14 @@ python3 scripts/extract-excalidraw.py input.png scene.excalidraw
 excalidraw render scene.excalidraw --theme dark --out rendered.png
 
 # Make the PNG editable
-python3 scripts/embed-excalidraw.py scene.excalidraw rendered.png editable.png
+python3 scripts/embed-excalidraw.py scene.excalidraw rendered.png editable.excalidraw.png
 ```
 
 For extraction-only or rendering-only requests, use just the needed steps.
 
 ## Always
 
+- Name editable PNGs `*.excalidraw.png` by default, unless the user specifies another name.
 - Preserve unrelated content and the original theme unless asked to change them.
 - Before publishing an editable PNG, extract its scene and compare it with the edited source using `cmp`.
 - Keep temporary files beside the destination. Replace originals with `mv` only after all steps succeed.
