@@ -1,6 +1,6 @@
 ---
 name: excalidraw
-description: Create, modify and render Excalidraw scenes and editable PNGs.
+description: Create, modify and render Excalidraw files such as .excalidraw and .excalidraw.png
 ---
 
 # Excalidraw workflow
