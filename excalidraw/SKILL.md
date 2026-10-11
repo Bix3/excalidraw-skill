@@ -84,6 +84,12 @@ python3 scripts/embed-excalidraw.py scene.excalidraw rendered.png editable.excal
 
 For extraction-only or rendering-only requests, use just the needed steps.
 
+## Hint: use a fast subagent
+
+For well-specified scene edits or JSON generation, prefer a fast subagent
+when available. Pass it this skill and explicit content/layout requirements.
+Inspect the rendered PNG before accepting the result.
+
 ## Always
 
 - Name editable PNGs `*.excalidraw.png` by default, unless the user specifies another name.
