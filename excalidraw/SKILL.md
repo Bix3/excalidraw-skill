@@ -73,13 +73,13 @@ The Python scripts are in `scripts/` beside this skill file. Paths below are rel
 
 ```bash
 # Extract a scene
-python3 scripts/extract-excalidraw.py input.png scene.excalidraw
+python scripts/extract-excalidraw.py input.png scene.excalidraw
 
 # Render a scene (choose dark or light)
 excalidraw render scene.excalidraw --theme dark --out rendered.png
 
 # Make the PNG editable
-python3 scripts/embed-excalidraw.py scene.excalidraw rendered.png editable.excalidraw.png
+python scripts/embed-excalidraw.py scene.excalidraw rendered.png editable.excalidraw.png
 ```
 
 For extraction-only or rendering-only requests, use just the needed steps.

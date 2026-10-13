@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python
 """Extract an embedded Excalidraw scene directly from PNG text chunks.
 
 Supports tEXt, zTXt, and compressed/uncompressed iTXt metadata, including

@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python
 """Embed an Excalidraw scene into a PNG without re-rendering it.
 
 Replaces all PNG text chunks with one scene tEXt chunk immediately before IEND.
