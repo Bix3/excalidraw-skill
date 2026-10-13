@@ -1,16 +1,17 @@
 #!/usr/bin/env python3
 """Embed an Excalidraw scene into a PNG without re-rendering it.
 
-Requires Python 3.8+ and ImageMagick 7 (magick on PATH).
-Replaces existing PNG text metadata with the editable scene.
+Replaces all PNG text chunks with one scene tEXt chunk immediately before IEND.
+Preserves every other chunk byte-for-byte, including compressed image data.
 """
 
 import argparse
 import json
 from pathlib import Path
-import shlex
-import subprocess
+import struct
 import zlib
+
+from png_chunks import PNG_SIGNATURE, SCENE_KEYWORD, TEXT_CHUNKS, iter_chunks
 
 
 def main():
@@ -26,44 +27,37 @@ def main():
     parser.add_argument("output_png", type=Path, help="editable PNG to write (overwrites)")
     args = parser.parse_args()
 
-    payload = json.dumps(
-        {
-            "version": "1",
-            "encoding": "bstring",
-            "compressed": True,
-            "encoded": zlib.compress(args.scene.read_bytes()).decode("latin1"),
-        },
-        ensure_ascii=True,
-        separators=(",", ":"),
-    )
-    # Remove existing text properties so Excalidraw finds our tEXt chunk first.
-    command = [str(args.input_png.resolve())]
-    with args.input_png.open("rb") as png:
-        png.seek(8)
-        while header := png.read(8):
-            length = int.from_bytes(header[:4], "big")
-            if header[4:] in (b"tEXt", b"zTXt", b"iTXt"):
-                keyword = png.read(length).split(b"\0", 1)[0].decode("latin1")
-                command.extend(["+set", keyword])
-                png.seek(4, 1)
-            else:
-                png.seek(length + 4, 1)
-
-    # -set interprets backslashes and percent signs; escape both literally.
-    payload = payload.replace("\\", "\\\\").replace("%", "%%")
-    command.extend([
-        "-set", "application/vnd.excalidraw+json", payload,
-        "-compress", "none",
-        "-define", "png:exclude-chunk=date,time",
-        "-write", "PNG:" + str(args.output_png.resolve()),
-    ])
-    # Stdin avoids command-line size limits and -define's value truncation.
-    subprocess.run(
-        ["magick", "-script", "-"],
-        input=shlex.join(command) + "\n",
-        text=True,
-        check=True,
-    )
+    try:
+        payload = json.dumps(
+            {
+                "version": "1",
+                "encoding": "bstring",
+                "compressed": True,
+                "encoded": zlib.compress(args.scene.read_bytes()).decode("latin1"),
+            },
+            ensure_ascii=True,
+            separators=(",", ":"),
+        )
+        # Read everything before writing so input and output may be the same path.
+        png = args.input_png.read_bytes()
+        chunk_data = SCENE_KEYWORD + b"\0" + payload.encode("latin1")
+        crc = zlib.crc32(chunk_data, zlib.crc32(b"tEXt")) & 0xFFFFFFFF
+        scene_chunk = (
+            struct.pack(">I", len(chunk_data))
+            + b"tEXt"
+            + chunk_data
+            + struct.pack(">I", crc)
+        )
+        output = bytearray(PNG_SIGNATURE)
+        for chunk_type, start, end in iter_chunks(png):
+            if chunk_type in TEXT_CHUNKS:
+                continue
+            if chunk_type == b"IEND":
+                output.extend(scene_chunk)
+            output.extend(png[start:end])
+        args.output_png.write_bytes(output)
+    except (OSError, ValueError) as error:
+        parser.exit(1, f"Cannot embed scene: {error}\n")
     print(f"Wrote {args.output_png}")
 
 
