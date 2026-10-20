@@ -94,5 +94,5 @@ Inspect the rendered PNG before accepting the result.
 
 - Name editable PNGs `*.excalidraw.png` by default, unless the user specifies another name.
 - Preserve unrelated content and the original theme unless asked to change them.
-- Keep temporary files beside the destination. Replace originals with `mv` only after all steps succeed.
+- Keep temporary files beside the destination. Replace originals only after all steps succeed.
 - Delete temporary files on success or failure; keep only the requested outputs.
