@@ -9,5 +9,4 @@ An agent skill for creating and editing Excalidraw scenes and editable PNGs.
 
 ## Install
 
-#### global
 Link `~/.agents/skills/<skill-name>` to `<repo>/<skill-name>`
